@@ -25,7 +25,7 @@ const clients: ClientsConfig<Clients> = {
   options: {
     // All IO Clients will be initialized with these options, unless otherwise specified.
     default: {
-      retries: 2,
+      retries: 5,
       timeout: TIMEOUT_MS,
     },
     // This key will be merged with the default options and add this cache to our Status client.
