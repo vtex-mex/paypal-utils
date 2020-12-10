@@ -1,0 +1,65 @@
+{
+  "name": "paypal-utils",
+  "vendor": "vtex",
+  "version": "0.0.3",
+  "title": "Paypal service Utils",
+  "description": "Paypal service Utils",
+  "mustUpdateAt": "2018-01-04",
+  "categories": [],
+  "dependencies": {},
+  "builders": {
+    "node": "6.x"
+  },
+  "scripts": {
+    "prereleasy": "bash lint.sh"
+  },
+  "credentialType": "absolute",
+  "policies": [
+    {
+      "name": "MakePayments"
+    },
+    {
+      "name": "ViewPayments"
+    },
+    {
+      "name": "OMSViewer"
+    },
+    {
+      "name": "ADMIN_DS"
+    },
+    {
+      "name": "POWER_USER_DS"
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "httpstat.us",
+        "path": "*"
+      }
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "portal.vtexcommercestable.com.br",
+        "path": "*"
+      }
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "{account}.vtexcommercestable.com.br",
+        "path": "*"
+      }
+    },
+    {
+      "name": "colossus-fire-event"
+    },
+    {
+      "name": "colossus-write-logs"
+    },
+    {
+      "name": "vbase-read-write"
+    }
+  ],
+  "$schema": "https://raw.githubusercontent.com/vtex/node-vtex-api/master/gen/manifest.schema"
+}
