@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.0.7] - 2020-12-11
+
 ## [0.2.0] - 2020-10-29
 ### Changed 
 - Update documentation to include Route Params.
