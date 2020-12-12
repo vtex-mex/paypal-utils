@@ -8,9 +8,14 @@ import {
 } from '@vtex/api'
 
 import { Clients } from './clients'
-import { listOrders, listOrdersDetail, paymentInteractions, cancelTransaction } from './middlewares/PayPalOrders'
+import {
+  listOrders,
+  listOrdersDetail,
+  paymentInteractions,
+  cancelTransaction
+} from './middlewares/PayPalOrders'
 
-const TIMEOUT_MS = 5000
+const TIMEOUT_MS = 10000
 
 // Create a LRU memory cache for the Status client.
 // The @vtex/api HttpClient respects Cache-Control headers and uses the provided cache.
@@ -25,7 +30,7 @@ const clients: ClientsConfig<Clients> = {
   options: {
     // All IO Clients will be initialized with these options, unless otherwise specified.
     default: {
-      retries: 5,
+      retries: 2,
       timeout: TIMEOUT_MS,
     },
     // This key will be merged with the default options and add this cache to our Status client.

@@ -27,9 +27,9 @@ export default class PayPalUtils extends JanusClient {
     })
   }
 
-  orderDetail(orderId: string, authToken: string, tracingConfig?: RequestTracingConfig): Promise<any> {
+  async orderDetail(orderId: string, authToken: string, tracingConfig?: RequestTracingConfig): Promise<any> {
     const metric = 'oms-order';
-    return this.http.get(routes.order(orderId), {
+    const lol = await this.http.get(routes.order(orderId), {
       headers: authToken
         ? {
           VtexIdclientAutCookie: authToken
@@ -38,6 +38,7 @@ export default class PayPalUtils extends JanusClient {
       metric,
       tracing: tracing_1.createTracing(metric, tracingConfig)
     })
+    return lol
   }
 
   paymentInteractions(transactionId: string, authToken: string, tracingConfig?: RequestTracingConfig): Promise<any> {
