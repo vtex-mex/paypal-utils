@@ -2,8 +2,13 @@ export async function listOrders(ctx: Context, next: () => Promise<any>) {
   const { clients: { paypal, status: statusClient }, } = ctx
 
   const date = new Date()
-  const from = new Date(new Date().setHours(date.getHours() - 24)).toISOString()
-  const to = new Date(new Date().setHours(date.getHours() - 2)).toISOString()
+  let from = new Date(new Date().setHours(date.getHours() - 2)).toISOString()
+  let to = new Date(new Date().setHours(date.getHours() - 1)).toISOString()
+
+  if (ctx.request.query.from && ctx.request.query.to && ctx.request.query.from > ctx.request.query.to) {
+    from = new Date(new Date().setHours(date.getHours() - ctx.request.query.from)).toISOString()
+    to = new Date(new Date().setHours(date.getHours() - ctx.request.query.to)).toISOString()
+  }
 
   console.log({ from, to })
 
