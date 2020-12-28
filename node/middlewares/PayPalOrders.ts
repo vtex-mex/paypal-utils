@@ -10,9 +10,11 @@ export async function listOrders(ctx: Context, next: () => Promise<any>) {
     to = new Date(new Date().setHours(date.getHours() - ctx.request.query.to)).toISOString()
   }
 
+  console.log(ctx.request.query.from, ctx.request.query.to)
   console.log({ from, to })
 
   const params = {
+    utc: '-0600',
     per_page: 100,
     orderBy: "creationDate,asc",
     f_paymentNames: "PayPal",
@@ -27,6 +29,29 @@ export async function listOrders(ctx: Context, next: () => Promise<any>) {
     headers,
   } = await statusClient.getStatusWithHeaders(200)
 
+  ctx.status = 200
+  ctx.set('Cache-Control', headers['cache-control'])
+
+  await next()
+}
+
+export async function listTransactions(ctx: Context, next: () => Promise<any>) {
+  const { clients: { transactions: transactionsClient, status: statusClient }, } = ctx
+
+  const params = {
+    'payments.paymentSystemName': 'paypal',
+    '_sort': 'startDate',
+    'status': 'authorizing'
+  }
+
+  const data = await transactionsClient.listTransactions(params)
+  console.log(data)
+
+  const {
+    headers,
+  } = await statusClient.getStatusWithHeaders(200)
+
+  ctx.body = data
   ctx.status = 200
   ctx.set('Cache-Control', headers['cache-control'])
 

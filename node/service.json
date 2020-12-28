@@ -9,6 +9,10 @@
     "payPal": {
       "path": "/_v/payPal",
       "public": true
+    },
+    "payPal2": {
+      "path": "/_v/payPal2",
+      "public": true
     }
   }
 }

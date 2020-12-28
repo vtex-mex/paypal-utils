@@ -3,6 +3,7 @@ import { statusToError } from '../utils/statusError'
 const tracing_1 = require("../utils/tracing");
 const routes = {
   listOrders: `/api/oms/pvt/orders`,
+  listTransactions: `/api/payments/pvt/admin/transactions`,
   order: (orderId: string) => `/api/oms/pvt/orders/${orderId}`,
   interactions: (transactionId: string) => `/api/payments/pvt/transactions/${transactionId}/interactions`,
   cancelTransaction: (transactionId: string) => `api/pvt/transactions/${transactionId}/cancellation-request`
@@ -76,4 +77,29 @@ export class GatewayClient extends ExternalClient {
 
   protected post = <T>(url: string, data: any, config: RequestConfig = {}) =>
     this.http.post<T>(url, data, config).catch(statusToError)
+}
+
+export class AdminTransactions extends ExternalClient {
+  constructor(ctx: IOContext, options?: InstanceOptions) {
+    super(`http://${ctx.account}.myvtex.com`, ctx, {
+      ...options,
+      headers: {
+        ...options?.headers,
+        VtexIdClientAutCookie: ctx.authToken,
+      },
+    })
+  }
+
+  public listTransactions = (params: any) => {
+    return this.get(routes.listTransactions, {
+      headers: {
+        'rest-range': 'resources=0-199'
+      },
+      params,
+      metric: 'payment-systems'
+    })
+  }
+
+  protected get = <T>(url: string, data: any) =>
+    this.http.get<T>(url, data).catch(statusToError)
 }

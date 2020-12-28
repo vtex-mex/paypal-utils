@@ -12,8 +12,14 @@ import {
   listOrders,
   listOrdersDetail,
   paymentInteractions,
-  cancelTransaction
+  cancelTransaction,
 } from './middlewares/PayPalOrders'
+
+import {
+  listTransactions,
+  interactions,
+  cancel
+} from './middlewares/PayPal2'
 
 const TIMEOUT_MS = 10000
 
@@ -50,6 +56,7 @@ declare global {
     orderList: any
     ordersListDetail: any
     interactions: any
+    transactionsList: any
   }
 }
 
@@ -64,6 +71,13 @@ export default new Service({
         listOrdersDetail,
         paymentInteractions,
         cancelTransaction
+      ],
+    }),
+    payPal2: method({
+      GET: [
+        listTransactions,
+        interactions,
+        cancel
       ],
     })
   },
