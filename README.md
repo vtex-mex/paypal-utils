@@ -1,18 +1,5 @@
-📢 Use this project, [contribute](https://github.com/vtex-apps/CHANGEME) to it or open issues to help evolve it using [Store Discussion](https://github.com/vtex-apps/store-discussion).
+# Paypal Utils
 
-# APP NAME
-
-<!-- DOCS-IGNORE:start -->
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-0-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
-<!-- DOCS-IGNORE:end -->
-
-Under the app's name, you should explain the topic, giving a **brief description** of the **app's functionality** (what is it for?) in a store.
-
-Next, you can **add media** (either an image of a GIF) if possible, so that users can better understand how the app works in practice. 
-
-![Media Placeholder](https://user-images.githubusercontent.com/52087100/71204177-42ca4f80-227e-11ea-89e6-e92e65370c69.png)
 
 ## Configuration
 
@@ -39,18 +26,3 @@ It is possible to install in your store either by using App Store or the VTEX IO
 There are scenarios in which an app can behave differently in a store, according to its configuration. It's crucial then to go through these **behavioral changes** in this section, allowing users to fully understand the **practical application** of the app in their store.
 
 If you feel compelled to give further details, such as the app's **relationship with others**, don't hesitate to use this section. 
-
-<!-- DOCS-IGNORE:start -->
-## Contributors ✨
-
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<!-- markdownlint-enable -->
-<!-- prettier-ignore-end -->
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind are welcome!
-<!-- DOCS-IGNORE:end -->

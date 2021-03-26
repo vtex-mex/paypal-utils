@@ -34,7 +34,11 @@ export async function interactions(ctx: Context, next: () => Promise<any>) {
 
     const i: any[] = []
     orders.forEach((order) => {
-      const l = order.interactions.find(({ Message }: any) => Message.includes('Usuario precisa ter se autenticado no Paypal para prosseguir com a transação.'))
+      const l = (
+        order.interactions.find(({ Message }: any) =>
+          Message.includes('Usuario precisa ter se autenticado no Paypal para prosseguir com a transação.') ||
+          Message.includes('User must be logged in to PayPal to proceed with payment.'))
+      )
       const o = order.interactions.find(({ Message }: any) => Message.includes('Transaction cancelation has finished for Id'))
       if (!o && l) i.push(order)
     })
@@ -44,8 +48,12 @@ export async function interactions(ctx: Context, next: () => Promise<any>) {
         referenceKey,
         status,
         value,
-        interaction: interactions.find(({ Message }: any) =>
-          Message === 'Usuario precisa ter se autenticado no Paypal para prosseguir com a transação.')
+        interaction: (
+          interactions.find(({ Message }: any) =>
+            Message === 'Usuario precisa ter se autenticado no Paypal para prosseguir com a transação.') ||
+          interactions.find(({ Message }: any) =>
+            Message === 'User must be logged in to PayPal to proceed with payment.')
+        )
       }
     )).filter(({ interaction }) => {
       return interaction != null;
