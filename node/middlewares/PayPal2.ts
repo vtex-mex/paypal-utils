@@ -5,7 +5,7 @@ export async function listTransactions(ctx: Context, next: () => Promise<any>) {
     'payments.paymentSystemName': 'paypal',
     '_sort': 'startDate',
     'status': 'authorizing',
-    'startDate': '[now-72h TO now-2h]'
+    'startDate': '[now-24h TO now-30m]'
   }
 
   ctx.state.transactionsList = await transactionsClient.listTransactions(params)
