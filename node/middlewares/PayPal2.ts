@@ -1,5 +1,5 @@
 export async function listTransactions(ctx: Context, next: () => Promise<any>) {
-  const { clients: { transactions: transactionsClient, status: statusClient }, } = ctx
+  const { clients: { transactions: transactionsClient }, } = ctx
 
   const params = {
     'payments.paymentSystemName': 'paypal',
@@ -10,20 +10,16 @@ export async function listTransactions(ctx: Context, next: () => Promise<any>) {
 
   ctx.state.transactionsList = await transactionsClient.listTransactions(params)
 
-  const {
-    headers,
-  } = await statusClient.getStatusWithHeaders(200)
-
   ctx.body = ctx.state.transactionsList
   ctx.status = 200
-  ctx.set('Cache-Control', headers['cache-control'])
+  ctx.set('Cache-Control', 'no-cache')
 
   await next()
 }
 
 export async function interactions(ctx: Context, next: () => Promise<any>) {
   const {
-    clients: { paypal, status: statusClient },
+    clients: { paypal },
   } = ctx
 
   if (ctx.state.transactionsList?.length) {
@@ -57,20 +53,16 @@ export async function interactions(ctx: Context, next: () => Promise<any>) {
     });
   }
 
-  const {
-    headers,
-  } = await statusClient.getStatusWithHeaders(200)
-
   ctx.body = ctx.state.interactions
   ctx.status = 200
-  ctx.set('Cache-Control', headers['cache-control'])
+  ctx.set('Cache-Control', 'no-cache')
 
   await next()
 }
 
 export async function cancel(ctx: Context, next: () => Promise<any>) {
   const {
-    clients: { gateway, status: statusClient },
+    clients: { gateway },
   } = ctx
 
   if (ctx.state.interactions?.length) {
@@ -85,12 +77,8 @@ export async function cancel(ctx: Context, next: () => Promise<any>) {
     }
   }
 
-  const {
-    headers,
-  } = await statusClient.getStatusWithHeaders(200)
-
   ctx.status = 200
-  ctx.set('Cache-Control', headers['cache-control'])
+  ctx.set('Cache-Control', 'no-cache')
 
   await next()
 }
