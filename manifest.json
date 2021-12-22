@@ -1,7 +1,7 @@
 {
   "name": "paypal-utils",
   "vendor": "vtex",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "title": "Paypal service Utils",
   "description": "Paypal service Utils",
   "mustUpdateAt": "2018-01-04",
