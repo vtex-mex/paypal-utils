@@ -1,11 +1,13 @@
 export async function listTransactions(ctx: Context, next: () => Promise<any>) {
-  const { clients: { transactions: transactionsClient }, } = ctx
+  const {
+    clients: { transactions: transactionsClient },
+  } = ctx
 
   const params = {
     'payments.paymentSystemName': 'paypal',
-    '_sort': 'startDate',
-    'status': 'authorizing',
-    'startDate': '[now-24h TO now-30m]'
+    _sort: 'startDate',
+    status: 'authorizing',
+    startDate: '[now-24h TO now-30m]',
   }
 
   ctx.state.transactionsList = await transactionsClient.listTransactions(params)
@@ -25,32 +27,58 @@ export async function interactions(ctx: Context, next: () => Promise<any>) {
   if (ctx.state.transactionsList?.length) {
     console.log('transactionsList', ctx.state.transactionsList?.length)
 
-    const orders: any[] = await Promise.all(ctx.state.transactionsList.map(async ({ id, status, value, referenceKey }: any) =>
-      ({ id, referenceKey, status, value, interactions: await paypal.paymentInteractions(id, ctx.vtex.authToken) })))
+    const orders: any[] = await Promise.all(
+      ctx.state.transactionsList.map(
+        async ({ id, status, value, referenceKey }: any) => ({
+          id,
+          referenceKey,
+          status,
+          value,
+          interactions: await paypal.paymentInteractions(
+            id,
+            ctx.vtex.authToken
+          ),
+        })
+      )
+    )
 
     const i: any[] = []
-    orders.forEach((order) => {
-      const l = (order.interactions.find(({ Message }: any) =>
-        Message.includes('Usuario precisa ter se autenticado no Paypal para prosseguir com a transação.') ||
-        Message.includes('User must be logged in to PayPal to proceed with payment.'))
+    orders.forEach(order => {
+      const l = order.interactions.find(
+        ({ Message }: any) =>
+          Message.includes(
+            'Usuario precisa ter se autenticado no Paypal para prosseguir com a transação.'
+          ) ||
+          Message.includes(
+            'User must be logged in to PayPal to proceed with payment.'
+          )
       )
-      const o = order.interactions.find(({ Message }: any) => Message.includes('Transaction cancelation has finished for Id'))
+      const o = order.interactions.find(({ Message }: any) =>
+        Message.includes('Transaction cancelation has finished for Id')
+      )
       if (!o && l) i.push(order)
     })
 
-    ctx.state.interactions = i.map(({ referenceKey, status, value, interactions }) => (
-      {
+    ctx.state.interactions = i
+      .map(({ referenceKey, status, value, interactions }) => ({
         referenceKey,
         status,
         value,
-        interaction: (interactions.find(({ Message }: any) =>
-          Message === 'Usuario precisa ter se autenticado no Paypal para prosseguir com a transação.') ||
-          interactions.find(({ Message }: any) =>
-            Message === 'User must be logged in to PayPal to proceed with payment.'))
-      }
-    )).filter(({ interaction }) => {
-      return interaction != null;
-    });
+        interaction:
+          interactions.find(
+            ({ Message }: any) =>
+              Message ===
+              'Usuario precisa ter se autenticado no Paypal para prosseguir com a transação.'
+          ) ||
+          interactions.find(
+            ({ Message }: any) =>
+              Message ===
+              'User must be logged in to PayPal to proceed with payment.'
+          ),
+      }))
+      .filter(({ interaction }) => {
+        return interaction != null
+      })
   }
 
   ctx.body = ctx.state.interactions
@@ -69,8 +97,20 @@ export async function cancel(ctx: Context, next: () => Promise<any>) {
     console.log('interactions', ctx.state.interactions?.length)
 
     if (ctx.request.query.cancel) {
-      const cancelation: any[] = await Promise.all(ctx.state.interactions.map(async ({ interaction: { TransactionId }, value, referenceKey }: any) =>
-        ({ referenceKey, TransactionId, value, cancelation: await gateway.cancelTransactions(TransactionId, value) })))
+      const cancelation: any[] = await Promise.all(
+        ctx.state.interactions.map(
+          async ({
+            interaction: { TransactionId },
+            value,
+            referenceKey,
+          }: any) => ({
+            referenceKey,
+            TransactionId,
+            value,
+            cancelation: await gateway.cancelTransactions(TransactionId, value),
+          })
+        )
+      )
       ctx.body = cancelation
     } else {
       ctx.body = ctx.state.interactions
